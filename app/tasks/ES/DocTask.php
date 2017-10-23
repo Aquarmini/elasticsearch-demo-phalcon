@@ -22,7 +22,34 @@ class DocTask extends Task
         echo Color::colorize('  add                 插入文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  get                 读取文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  search              搜索文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  update              更新文档', Color::FG_GREEN) . PHP_EOL;
 
+    }
+
+    public function updateAction()
+    {
+        $client = Client::getInstance();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'id' => 101,
+            'body' => [
+                'doc' => [
+                    'name' => '李铭昕',
+                    'age' => rand(1, 99),
+                    'birthday' => '1990-01-24',
+                ]
+            ],
+            'refresh' => true,
+        ];
+
+        try {
+            $res = $client->update($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            dd($res);
+        }
     }
 
     public function searchAction()
