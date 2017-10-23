@@ -85,6 +85,7 @@ class IndexTask extends Task
                     'age' => ['type' => 'short'],
                     'birthday' => ['type' => 'date'],
                     'location' => ['type' => 'geo_point'],
+                    'randnum' => ['type' => 'long'],
                 ],
             ],
         ];
