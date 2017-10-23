@@ -19,7 +19,7 @@ composer require elasticsearch/elasticsearch
 ### 使用
 1. 索引初始化 - 新建索引
 ~~~
-$client = Client::getInstance();
+$client = ClientBuilder::create()->setHosts([$host])->build();
 $indices = $client->indices();
 
 $params = [
