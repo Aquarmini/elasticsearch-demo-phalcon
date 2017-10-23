@@ -65,7 +65,7 @@ class DocTask extends Task
                 //     ],
                 // ],
                 'from' => 0,
-                'size' => 2,
+                'size' => 5,
                 'sort' => [
                     // 'age' => [
                     //     'order' => 'desc'
@@ -77,6 +77,7 @@ class DocTask extends Task
                         ],
                         'order' => 'asc',
                         'unit' => 'km',
+                        'mode' => 'min',
                     ],
                 ],
             ],
