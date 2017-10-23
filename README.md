@@ -8,3 +8,11 @@
 [Phalcon 官网](https://docs.phalconphp.com/zh/latest/index.html)
 
 [wiki](https://github.com/limingxinleo/simple-subcontrollers.phalcon/wiki)
+
+## Elasticsearch使用
+
+### 安装
+~~~
+composer require elasticsearch/elasticsearch
+~~~
+
