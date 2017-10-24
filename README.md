@@ -151,32 +151,26 @@ $params = [
             //         'query' => '1'
             //     ]
             // ],
-            'match_all' => [],
+            // 'match_all' => [
+            //     'boost' => 1.0
+            // ],
             // 'term' => [
             //     'name' => '李铭昕0'
             // ],
-
-        ],
-        'filter' => [
-            'geo_distance' => [
-                'distance' => '1km',
-                'location' => [
-                    'lat' => $lat,
-                    'lon' => $lon
+            'bool' => [
+                'filter' => [
+                    'geo_distance' => [
+                        'distance' => '1km',
+                        'location' => [
+                            'lat' => $lat,
+                            'lon' => $lon
+                        ],
+                    ],
                 ],
-            ],
+            ]
         ],
-        // 'script_fields' => [
-        //     'distance' => [
-        //         'params' => [
-        //             'lat' => $lat,
-        //             'lon' => $lon
-        //         ],
-        //         'script' => "doc['location'].distanceInKm(lat,lon)",
-        //     ],
-        // ],
         'from' => 0,
-        'size' => 2,
+        'size' => 5,
         'sort' => [
             // 'age' => [
             //     'order' => 'desc'
@@ -188,10 +182,12 @@ $params = [
                 ],
                 'order' => 'asc',
                 'unit' => 'km',
+                'mode' => 'min',
             ],
         ],
     ],
 ];
+
 try {
     $res = $client->search($params);
     dd($res);
