@@ -82,6 +82,10 @@ class IndexTask extends Task
             'body' => [
                 'properties' => [
                     'name' => ['type' => 'string'],
+                    'book.author' => ['type' => 'string'],
+                    'book.name' => ['type' => 'string'],
+                    'book.publish' => ['type' => 'date'],
+                    'book.desc' => ['type' => 'string'],
                     'age' => ['type' => 'short'],
                     'birthday' => ['type' => 'date'],
                     'location' => ['type' => 'geo_point'],
