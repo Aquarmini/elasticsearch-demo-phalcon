@@ -48,13 +48,15 @@ class DocTask extends Task
                             ['term' => ['book.author' => 'limx']],
                         ],
                         'filter' => [
-                            ['geo_distance' => [
-                                'distance' => '1km',
-                                'location' => [
-                                    'lat' => $lat,
-                                    'lon' => $lon
-                                ],
-                            ]],
+                            [
+                                'geo_distance' => [
+                                    'distance' => '1km',
+                                    'location' => [
+                                        'lat' => $lat,
+                                        'lon' => $lon
+                                    ],
+                                ]
+                            ],
                         ],
                     ],
 
@@ -62,15 +64,17 @@ class DocTask extends Task
                 'from' => 0,
                 'size' => 5,
                 'sort' => [
-                    ['_geo_distance' => [
-                        'location' => [
-                            'lat' => $lat,
-                            'lon' => $lon
-                        ],
-                        'order' => 'asc',
-                        'unit' => 'km',
-                        'mode' => 'min',
-                    ]],
+                    [
+                        '_geo_distance' => [
+                            'location' => [
+                                'lat' => $lat,
+                                'lon' => $lon
+                            ],
+                            'order' => 'asc',
+                            'unit' => 'km',
+                            'mode' => 'min',
+                        ]
+                    ],
                     [
                         'randnum' => 'desc',
                     ]
