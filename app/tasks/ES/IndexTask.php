@@ -19,11 +19,36 @@ class IndexTask extends Task
 
         echo Color::head('Actions:') . PHP_EOL;
         echo Color::colorize('  info              搜索引擎信息', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  list              搜索引擎index列表', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  create            创建index', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  mapping           创建mapping', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  getMapping        读取mapping', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  del               删除整个索引', Color::FG_GREEN) . PHP_EOL;
 
+    }
+
+    public function listAction()
+    {
+        $client = Client::getInstance();
+        try {
+            $cat = $client->cat();
+            $res = $cat->indices();
+            // dump($res);
+
+            $indices = $client->indices();
+            $res = $indices->getMapping([
+                'index' => ES::ES_INDEX
+            ]);
+            
+            dump($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            if ($res) {
+                echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
+            } else {
+                echo Color::colorize($ex->getMessage(), Color::FG_LIGHT_RED) . PHP_EOL;
+            }
+        }
     }
 
     public function delAction()
