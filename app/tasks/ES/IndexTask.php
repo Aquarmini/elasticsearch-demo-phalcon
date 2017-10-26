@@ -39,7 +39,7 @@ class IndexTask extends Task
             $res = $indices->getMapping([
                 'index' => ES::ES_INDEX
             ]);
-            
+
             dump($res);
         } catch (\Exception $ex) {
             $res = json_decode($ex->getMessage(), true);

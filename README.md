@@ -17,7 +17,8 @@ composer require elasticsearch/elasticsearch
 ~~~
 
 ### 使用
-具体使用方法在app/tasks/ES中
+[代码目录](https://github.com/Aquarmini/elasticsearch-demo-phalcon/tree/demo/app/tasks/ES)
+
 ~~~
 # 查看文档目录
 php run es:main
