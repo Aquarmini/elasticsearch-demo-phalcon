@@ -2,13 +2,16 @@
 
 namespace App\Tasks\ES;
 
+use App\Logics\EsLogic;
 use App\Support\Elasticsearch\Client;
 use App\Support\Elasticsearch\ES;
 use App\Tasks\Task;
 use Xin\Cli\Color;
+use Xin\Phalcon\Cli\Traits\Input;
 
 class DocTask extends Task
 {
+    use Input;
 
     public function mainAction()
     {
@@ -23,7 +26,167 @@ class DocTask extends Task
         echo Color::colorize('  get                 读取文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  search              搜索文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  update              更新文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  geo                 经纬度搜索文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  term                精确查询搜索文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  match               模糊匹配搜索文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  bool                BOOL查询', Color::FG_GREEN) . PHP_EOL;
+    }
 
+    public function boolAction()
+    {
+        $client = Client::getInstance();
+        $lat = EsLogic::getRandomLat();
+        $lon = EsLogic::getRandomLon();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            ['match' => ['name' => '小王']],
+                            ['term' => ['book.author' => 'limx']],
+                        ],
+                        'filter' => [
+                            ['geo_distance' => [
+                                'distance' => '1km',
+                                'location' => [
+                                    'lat' => $lat,
+                                    'lon' => $lon
+                                ],
+                            ]],
+                        ],
+                    ],
+
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    ['_geo_distance' => [
+                        'location' => [
+                            'lat' => $lat,
+                            'lon' => $lon
+                        ],
+                        'order' => 'asc',
+                        'unit' => 'km',
+                        'mode' => 'min',
+                    ]],
+                    [
+                        'randnum' => 'desc',
+                    ]
+                ],
+            ],
+        ];
+        try {
+            $res = $client->search($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            dd($res);
+        }
+    }
+
+    public function matchAction()
+    {
+        $client = Client::getInstance();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'name' => '小王',
+                        // 'book.author' => '小王',
+                    ]
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    'age' => 'asc'
+                ],
+            ],
+        ];
+        try {
+            $res = $client->search($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            dd($res);
+        }
+    }
+
+    public function termAction()
+    {
+        $client = Client::getInstance();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'body' => [
+                'query' => [
+                    'term' => [
+                        'name' => 'limx'
+                    ]
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    'age' => 'asc'
+                ],
+            ],
+        ];
+        try {
+            $res = $client->search($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            dd($res);
+        }
+    }
+
+    public function geoAction()
+    {
+        $client = Client::getInstance();
+        $lat = EsLogic::getRandomLat();
+        $lon = EsLogic::getRandomLon();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'filter' => [
+                            'geo_distance' => [
+                                'distance' => '1km',
+                                'location' => [
+                                    'lat' => $lat,
+                                    'lon' => $lon
+                                ],
+                            ],
+                        ],
+                    ]
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    '_geo_distance' => [
+                        'location' => [
+                            'lat' => $lat,
+                            'lon' => $lon
+                        ],
+                        'order' => 'asc',
+                        'unit' => 'km',
+                        'mode' => 'min',
+                    ],
+                ],
+            ],
+        ];
+        try {
+            $res = $client->search($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            dd($res);
+        }
     }
 
     public function updateAction()
@@ -131,33 +294,40 @@ class DocTask extends Task
 
     public function addAction()
     {
+        $length = $this->argument('num') ?? 100;
         $client = Client::getInstance();
-        $lat = 31.249162;
-        $lon = 121.487899;
-        for ($i = 0; $i < 100; $i++) {
-            $num = $i + rand(1, 1000);
-            $vlat = bcadd($lat, $num / 100000, 6);
-            $vlon = bcadd($lon, $num / 100000, 6);
+        for ($i = 0; $i < $length; $i++) {
             $params = [
                 'index' => ES::ES_INDEX,
                 'type' => ES::ES_TYPE_USER,
                 'id' => $i,
                 'body' => [
-                    'name' => '李铭昕' . $i,
+                    'name' => EsLogic::getRandomName(),
                     'age' => rand(1, 99),
-                    'birthday' => '1990-01-23',
+                    'birthday' => EsLogic::getRandomDate(),
+                    'book' => [
+                        'author' => EsLogic::getRandomName(),
+                        'name' => EsLogic::getRandomBook(),
+                        'publish' => EsLogic::getRandomDate(),
+                        'desc' => EsLogic::getRandomBook() . ' 不在话下。'
+                    ],
                     'location' => [
-                        'lat' => $vlat,
-                        'lon' => $vlon,
+                        'lat' => EsLogic::getRandomLat(),
+                        'lon' => EsLogic::getRandomLon(),
                     ],
                     'randnum' => rand(1, 999999)
                 ],
             ];
-            $res = $client->index($params);
-            if ($res['created']) {
-                echo Color::colorize('用户DOC创建成功', Color::FG_GREEN) . PHP_EOL;
-            } else {
-                echo Color::colorize('用户DOC创建失败（可能已存在））', Color::FG_LIGHT_RED) . PHP_EOL;
+            // dd($params);
+            try {
+                $res = $client->index($params);
+                if ($res['created']) {
+                    echo Color::colorize('用户DOC创建成功', Color::FG_GREEN) . PHP_EOL;
+                } else {
+                    echo Color::colorize('用户DOC创建失败（可能已存在））', Color::FG_LIGHT_RED) . PHP_EOL;
+                }
+            } catch (\Exception $ex) {
+                dd($ex->getMessage());
             }
         }
 
