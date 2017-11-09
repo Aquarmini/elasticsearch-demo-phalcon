@@ -31,6 +31,9 @@ class DocTask extends Task
         echo Color::colorize('  match               模糊匹配搜索文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  bool                BOOL查询', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  del                 删除文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  delType             删除某类型的所有文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  delQuery            删除某些文档', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  count               某类型文档总数', Color::FG_GREEN) . PHP_EOL;
     }
 
     public function boolAction()
@@ -379,6 +382,45 @@ class DocTask extends Task
             dd($ex->getMessage());
         }
 
+        dd($res);
+    }
+
+    public function delQueryAction()
+    {
+        $client = Client::getInstance();
+        try {
+            $params = [
+                'index' => ES::ES_INDEX,
+                'type' => ES::ES_TYPE_USER,
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'must' => [
+                                ['term' => ['book.author' => 'limx']]
+                            ],
+                        ]
+                    ],
+                ],
+            ];
+            $res = $client->deleteByQuery($params);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+        dd($res);
+    }
+
+    public function countAction()
+    {
+        $client = Client::getInstance();
+        try {
+            $params = [
+                'index' => ES::ES_INDEX,
+                'type' => ES::ES_TYPE_USER,
+            ];
+            $res = $client->count($params);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
         dd($res);
     }
 
