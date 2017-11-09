@@ -338,9 +338,48 @@ class DocTask extends Task
 
     }
 
+    public function delTypeAction()
+    {
+        $client = Client::getInstance();
+        try {
+            $params = [
+                'index' => ES::ES_INDEX,
+                'type' => ES::ES_TYPE_USER,
+                'body' => [
+                    'query' => [
+                        'match_all' => (object)[]
+                    ],
+                ],
+            ];
+            $res = $client->deleteByQuery($params);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+        dd($res);
+    }
+
     public function delAction()
     {
-        $id = $this->argument('id');
+        $id = $this->argument('id', 1);
+        $client = Client::getInstance();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'id' => $id,
+        ];
+        try {
+            $res = $client->get($params);
+        } catch (\Exception $ex) {
+            EsLogic::add($id);
+        }
+
+        try {
+            $res = $client->delete($params);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
+        }
+
+        dd($res);
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Logics;
 
+use App\Support\Elasticsearch\Client;
+use App\Support\Elasticsearch\ES;
+
 class EsLogic extends Base
 {
     const LAT = 31.249162;
@@ -50,6 +53,38 @@ class EsLogic extends Base
 
         $id = rand(0, count($arr) - 1);
         return $arr[$id];
+    }
+
+    public static function add($id)
+    {
+        $client = Client::getInstance();
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+            'id' => $id,
+            'body' => [
+                'name' => EsLogic::getRandomName(),
+                'age' => rand(1, 99),
+                'birthday' => EsLogic::getRandomDate(),
+                'book' => [
+                    'author' => EsLogic::getRandomName(),
+                    'name' => EsLogic::getRandomBook(),
+                    'publish' => EsLogic::getRandomDate(),
+                    'desc' => EsLogic::getRandomBook() . ' 不在话下。'
+                ],
+                'location' => [
+                    'lat' => EsLogic::getRandomLat(),
+                    'lon' => EsLogic::getRandomLon(),
+                ],
+                'randnum' => rand(1, 999999)
+            ],
+        ];
+        try {
+            $res = $client->index($params);
+            return true;
+        } catch (\Exception $ex) {
+            return false;
+        }
     }
 }
 
