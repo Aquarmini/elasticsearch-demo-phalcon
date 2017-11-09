@@ -30,6 +30,7 @@ class DocTask extends Task
         echo Color::colorize('  term                精确查询搜索文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  match               模糊匹配搜索文档', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  bool                BOOL查询', Color::FG_GREEN) . PHP_EOL;
+        echo Color::colorize('  del                 删除文档', Color::FG_GREEN) . PHP_EOL;
     }
 
     public function boolAction()
@@ -335,6 +336,11 @@ class DocTask extends Task
             }
         }
 
+    }
+
+    public function delAction()
+    {
+        $id = $this->argument('id');
     }
 
 }
