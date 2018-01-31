@@ -5,7 +5,7 @@ namespace App\Biz;
 use App\Support\Elasticsearch\Client;
 use App\Support\Elasticsearch\ES;
 
-class EsLogic extends Base
+class EsLogic
 {
     const LAT = 31.249162;
     const LON = 121.487899;
