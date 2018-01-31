@@ -27,6 +27,12 @@ class IndexTask extends Task
 
     }
 
+    public function infoAction()
+    {
+        $client = Client::getInstance();
+        dd($client->info());
+    }
+
     public function listAction()
     {
         $client = Client::getInstance();
@@ -51,7 +57,7 @@ class IndexTask extends Task
         }
     }
 
-    public function delAction()
+    public function createAction()
     {
         $client = Client::getInstance();
         $indices = $client->indices();
@@ -60,39 +66,14 @@ class IndexTask extends Task
             'index' => ES::ES_INDEX,
         ];
         try {
-            $res = $indices->delete($params);
+            $res = $indices->create($params);
             if ($res['acknowledged']) {
-                echo Color::success('删除索引成功') . PHP_EOL;
+                echo Color::success('Index 创建成功') . PHP_EOL;
             }
         } catch (\Exception $ex) {
             $res = json_decode($ex->getMessage(), true);
-            if ($res) {
-                echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
-            } else {
-                echo Color::colorize($ex->getMessage(), Color::FG_LIGHT_RED) . PHP_EOL;
-            }
-        }
-    }
-
-    public function getMappingAction()
-    {
-        $client = Client::getInstance();
-        $indices = $client->indices();
-
-        $params = [
-            'index' => ES::ES_INDEX,
-            'type' => ES::ES_TYPE_USER,
-        ];
-        try {
-            $res = $indices->getMapping($params);
-            dd($res);
-        } catch (\Exception $ex) {
-            $res = json_decode($ex->getMessage(), true);
-            if ($res) {
-                echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
-            } else {
-                echo Color::colorize($ex->getMessage(), Color::FG_LIGHT_RED) . PHP_EOL;
-            }
+            // dump($res);
+            echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
         }
     }
 
@@ -133,13 +114,29 @@ class IndexTask extends Task
         }
     }
 
-    public function infoAction()
+    public function getMappingAction()
     {
         $client = Client::getInstance();
-        dd($client->info());
+        $indices = $client->indices();
+
+        $params = [
+            'index' => ES::ES_INDEX,
+            'type' => ES::ES_TYPE_USER,
+        ];
+        try {
+            $res = $indices->getMapping($params);
+            dd($res);
+        } catch (\Exception $ex) {
+            $res = json_decode($ex->getMessage(), true);
+            if ($res) {
+                echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
+            } else {
+                echo Color::colorize($ex->getMessage(), Color::FG_LIGHT_RED) . PHP_EOL;
+            }
+        }
     }
 
-    public function createAction()
+    public function delAction()
     {
         $client = Client::getInstance();
         $indices = $client->indices();
@@ -148,16 +145,18 @@ class IndexTask extends Task
             'index' => ES::ES_INDEX,
         ];
         try {
-            $res = $indices->create($params);
+            $res = $indices->delete($params);
             if ($res['acknowledged']) {
-                echo Color::success('Index 创建成功') . PHP_EOL;
+                echo Color::success('删除索引成功') . PHP_EOL;
             }
         } catch (\Exception $ex) {
             $res = json_decode($ex->getMessage(), true);
-            // dump($res);
-            echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
+            if ($res) {
+                echo Color::colorize($res['error']['reason'], Color::FG_LIGHT_RED) . PHP_EOL;
+            } else {
+                echo Color::colorize($ex->getMessage(), Color::FG_LIGHT_RED) . PHP_EOL;
+            }
         }
     }
-
 }
 

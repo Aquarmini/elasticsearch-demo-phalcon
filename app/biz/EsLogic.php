@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logics;
+namespace App\Biz;
 
 use App\Support\Elasticsearch\Client;
 use App\Support\Elasticsearch\ES;
