@@ -327,7 +327,8 @@ class DocTask extends Task
                     'name' => '李铭昕',
                     'age' => rand(1, 99),
                     'birthday' => '1990-01-24',
-                ]
+                ],
+                'doc_as_upsert' => true,
             ],
             'refresh' => true,
         ];
