@@ -9,10 +9,46 @@
 ### Changed
 
 ### Fixed
+
+### Deleted
+
+## [2.2.5]
+### Checked
+- [x] php单元测试
+
+### Changed
+* 修改单元测试，增加命名空间Tests
+* 修改代码规范
+* 修改vendor/autoload的加载位置
+* 默认phalcon-dev脚本加载app/bootstrap.php
+* 修改中间件默认执行顺序
+
+### Fixed
+* 修改Socket基类的配置，避免覆盖Injectable的config服务
+
+### Deleted
+* 删除多余注释
+* 删除updateOnly，使用useDynamicUpdate代替
+* 移除单元测试
+* 删除App自定义配置服务
+
+## [2.1.5]
+### Checked
+- [x] php单元测试
+
+### Added
+* 增加数据库端口配置
+
+### Changed
+* 修改mkdir为File::makeDirectory方法
+
+### Fixed
 * 修改InstanceBase getInstance不能返回一个实例的BUG
+* 修改当并发新建日志目录时，如果已存在目录，则不抛出错误
 
 ### Deleted
 * 删除Logic目录
+* 删除不符合设计的代码
 
 ## [2.0.7]
 ### Checked

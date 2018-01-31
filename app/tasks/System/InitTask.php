@@ -11,6 +11,7 @@ namespace App\Tasks\System;
 use Phalcon\Text;
 use Xin\Cli\Color;
 use Phalcon\Cli\Task;
+use Xin\Support\File;
 
 class InitTask extends Task
 {
@@ -26,7 +27,7 @@ class InitTask extends Task
         echo Color::colorize('  系统初始化脚本') . PHP_EOL . PHP_EOL;
 
         echo Color::head('Usage:') . PHP_EOL;
-        echo Color::colorize('  php run System\\\\Init [action]', Color::FG_GREEN) . PHP_EOL . PHP_EOL;
+        echo Color::colorize('  php run system:init@[action]', Color::FG_GREEN) . PHP_EOL . PHP_EOL;
 
         echo Color::head('Actions:') . PHP_EOL;
         echo Color::colorize('  storage                         初始化仓库', Color::FG_GREEN) . PHP_EOL;
@@ -50,7 +51,7 @@ class InitTask extends Task
         echo Color::head('仓库初始化') . PHP_EOL;
         foreach ($creatRoot as $i => $v) {
             if (!is_dir($v)) {
-                mkdir($v, 0777, true);
+                File::getInstance()->makeDirectory($v, 0777, true, true);
                 echo Color::colorize(sprintf("  新建%s成功", $i), Color::BG_GREEN) . PHP_EOL;
             }
         }
@@ -77,7 +78,6 @@ class InitTask extends Task
             file_get_contents(ROOT_PATH . '/.env')
         ));
         echo Color::success($key . " was successfully changed.");
-
     }
 
     private static function random($val)
@@ -102,5 +102,4 @@ class InitTask extends Task
         }
         return $res;
     }
-
 }
