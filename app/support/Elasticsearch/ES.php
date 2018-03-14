@@ -17,5 +17,4 @@ class ES
 
     const ES_TYPE_TEST = 'test';
     const ES_TYPE_USER = 'user';
-
 }

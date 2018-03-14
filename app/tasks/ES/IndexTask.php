@@ -24,7 +24,6 @@ class IndexTask extends Task
         echo Color::colorize('  mapping           创建mapping', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  getMapping        读取mapping', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  del               删除整个索引', Color::FG_GREEN) . PHP_EOL;
-
     }
 
     public function infoAction()
@@ -159,4 +158,3 @@ class IndexTask extends Task
         }
     }
 }
-

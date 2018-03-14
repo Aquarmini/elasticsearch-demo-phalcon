@@ -7,7 +7,6 @@ use Xin\Cli\Color;
 
 class MainTask extends Task
 {
-
     public function mainAction()
     {
         echo Color::head('Help:') . PHP_EOL;
@@ -20,6 +19,4 @@ class MainTask extends Task
         echo Color::colorize('  index           索引操作', Color::FG_GREEN) . PHP_EOL;
         echo Color::colorize('  doc             文档操作', Color::FG_GREEN) . PHP_EOL;
     }
-
 }
-

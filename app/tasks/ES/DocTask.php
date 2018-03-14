@@ -74,7 +74,6 @@ class DocTask extends Task
                 dd($ex->getMessage());
             }
         }
-
     }
 
     public function getAction()
@@ -424,6 +423,4 @@ class DocTask extends Task
         }
         dd($res);
     }
-
 }
-
