@@ -24,7 +24,8 @@ $loader
             'App\Core' => $config->application->coreDir,
             'App\Support' => APP_PATH . '/support/',
             'App\Middleware' => $config->application->middlewareDir,
-            'App\Biz' => APP_PATH . '/biz/',
+            'App\Biz' => $config->application->bizDir,
+            'App\Common' => $config->application->commonDir,
         ]
     )->registerFiles(
         [

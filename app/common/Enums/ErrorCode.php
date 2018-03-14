@@ -1,21 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | Model.php [ WE CAN DO IT JUST THINK IT ]
+// | ErrorCode.php [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2017 limingxinleo All rights reserved.
 // +----------------------------------------------------------------------
 // | Author: limx <715557344@qq.com> <https://github.com/limingxinleo>
 // +----------------------------------------------------------------------
-namespace App\Core\Mvc;
+namespace App\Common\Enums;
 
-/**
- * Class Model
- * @package App\Models
- * @method initialize
- * @method beforeCreate
- * @method beforeUpdate
- * @method afterSave
- */
-abstract class Model extends \Phalcon\Mvc\Model
+use Xin\Phalcon\Enum\Enum;
+
+class ErrorCode extends Enum
 {
+
+    /**
+     * @Message('系统错误')
+     */
+    public static $ENUM_SYSTEM_ERROR = 400;
 }
