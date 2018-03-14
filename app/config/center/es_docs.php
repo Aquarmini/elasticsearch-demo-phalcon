@@ -55,4 +55,20 @@ return [
         ],
         'randnum' => 444
     ],
+    [
+        'name' => '李大神',
+        'age' => 28,
+        'birthday' => '1990-08-08',
+        'book' => [
+            'author' => 'limx',
+            'name' => '1天学会GO',
+            'publish' => '2017-02-02',
+            'desc' => '1天学会GO，你就发现Go的牛逼之处'
+        ],
+        'location' => [
+            'lat' => 31.249162,
+            'lon' => 121.487900,
+        ],
+        'randnum' => 666
+    ],
 ];

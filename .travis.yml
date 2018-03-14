@@ -23,8 +23,7 @@ git:
   depth: 1
 
 services:
-  - redis-server
-  - mongodb
+  - elasticsearch
 
 before_install:
   - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
@@ -56,10 +55,9 @@ install:
 
 before_script:
   # 启动PHP
+  - sleep 10
   - cd $TRAVIS_BUILD_DIR
-  - php run server:service --daemonize
-  - php -S localhost:8080 -t public &> /dev/null &
-  - php run queue &> /dev/null &
+  - php run init
 
 script:
   - cd $TRAVIS_BUILD_DIR

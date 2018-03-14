@@ -22,12 +22,4 @@ class BaseTest extends UnitTestCase
             extension_loaded('phalcon')
         );
     }
-
-    public function testRpcServiceCase()
-    {
-        $this->assertEquals(
-            di('config')->version,
-            BasicClient::getInstance()->version()
-        );
-    }
 }
