@@ -55,7 +55,7 @@ install:
 
 before_script:
   # 启动PHP
-  - sleep 10
+  - sleep 20
   - cd $TRAVIS_BUILD_DIR
   - php run init
 
