@@ -227,4 +227,34 @@ class ElasticSearchTest extends UnitTestCase
 
         $this->assertEquals($expect, $actual);
     }
+
+    public function testOrBoolQuery()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $params = [
+            'index' => SystemCode::ES_INDEX,
+            'type' => SystemCode::ES_TYPE,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'should' => [
+                            ['match' => ['book.desc' => ['query' => '学会']]],
+                            ['match' => ['book.name' => '精通']],
+                        ],
+                    ],
+
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    [
+                        'randnum' => 'desc',
+                    ]
+                ],
+            ],
+        ];
+
+        $res = $client->search($params);
+        $this->assertEquals(4, $res['hits']['total']);
+    }
 }
