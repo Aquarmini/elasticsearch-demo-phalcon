@@ -119,6 +119,7 @@ class ElasticSearchTest extends UnitTestCase
             'id' => 999,
         ]);
 
+        sleep(1);
         $this->assertTrue($res['found']);
         $this->assertEquals('deleted', $res['result']);
         $this->assertEquals(1, $res['_shards']['successful']);

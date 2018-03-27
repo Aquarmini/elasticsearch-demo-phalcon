@@ -103,7 +103,7 @@ class InitTask extends Task
                     'id' => ['type' => 'long'],
                     'name' => ['type' => 'string'],
                     'book' => [
-                        'type' => 'nested',
+                        'type' => 'object',
                         'properties' => [
                             'author' => ['type' => 'string'],
                             'name' => ['type' => 'string'],
