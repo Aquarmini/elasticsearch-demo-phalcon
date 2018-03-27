@@ -249,7 +249,7 @@ class ElasticSearchTest extends UnitTestCase
      * @desc   测试BOOL查询或者逻辑
      * @author limx
      */
-    public function testOrBoolQuery()
+    public function testBoolOrQuery()
     {
         $client = ElasticSearchClient::getInstance();
         $params = [
@@ -317,5 +317,103 @@ class ElasticSearchTest extends UnitTestCase
         $this->assertEquals($expect, $actual);
     }
 
+    /**
+     * @desc   测试BOOL查询范围逻辑
+     * @author limx
+     */
+    public function testBoolRangeQuery()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $params = [
+            'index' => SystemCode::ES_INDEX,
+            'type' => SystemCode::ES_TYPE,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            ['range' => ['id' => ['from' => 1, 'to' => 2]]],
+                        ],
+                    ],
 
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    [
+                        'id' => 'asc',
+                    ]
+                ],
+            ],
+        ];
+
+        $res = $client->search($params);
+        $docs = di('configCenter')->get('es_docs')->toArray();
+
+        $expect = [];
+        $expect[] = $docs[1];
+        $expect[] = $docs[2];
+
+        $this->assertEquals(2, $res['hits']['total']);
+
+        $actual = [];
+        foreach ($res['hits']['hits'] as $item) {
+            $actual[] = $item['_source'];
+        }
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    /**
+     * @desc   测试BOOL查询游标查询
+     * @author limx
+     */
+    public function testBoolScrollQuery()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $scroll = '1m';
+
+        $params = [
+            'index' => SystemCode::ES_INDEX,
+            'type' => SystemCode::ES_TYPE,
+            'scroll' => $scroll,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            ['match_all' => (object)[]],
+                        ],
+                    ],
+
+                ],
+                'from' => 0,
+                'size' => 1,
+                'sort' => [
+                    [
+                        'id' => 'asc',
+                    ]
+                ],
+            ],
+        ];
+
+        $res = $client->search($params);
+        $result = [];
+        $total = $res['hits']['total'];
+
+        $this->assertEquals(4, $total);
+
+        do {
+            $scrollId = $res['_scroll_id'];
+
+            foreach ($res['hits']['hits'] as $hit) {
+                $result[] = $hit['_source'];
+            }
+
+            $res = $client->scroll(['scroll_id' => $scrollId, 'scroll' => $scroll]);
+
+        } while (!empty($res['hits']['hits']));
+
+        $expect = di('configCenter')->get('es_docs')->toArray();
+
+        $this->assertEquals($expect, $result);
+    }
 }
