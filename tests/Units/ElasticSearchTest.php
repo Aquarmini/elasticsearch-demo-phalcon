@@ -18,6 +18,10 @@ use Tests\UnitTestCase;
  */
 class ElasticSearchTest extends UnitTestCase
 {
+    /**
+     * @desc   测试读取文档
+     * @author limx
+     */
     public function testGetDocumnet()
     {
         $client = ElasticSearchClient::getInstance();
@@ -35,6 +39,10 @@ class ElasticSearchTest extends UnitTestCase
         $this->assertEquals($expect, $source);
     }
 
+    /**
+     * @desc   测试新增和删除文档
+     * @author limx
+     */
     public function testAddAndDeleteDocument()
     {
         $client = ElasticSearchClient::getInstance();
@@ -117,6 +125,10 @@ class ElasticSearchTest extends UnitTestCase
         $this->assertEquals(0, $res['_shards']['failed']);
     }
 
+    /**
+     * @desc   测试经纬度算法
+     * @author limx
+     */
     public function testGeoBoolQuery()
     {
         $client = ElasticSearchClient::getInstance();
@@ -173,6 +185,10 @@ class ElasticSearchTest extends UnitTestCase
         $this->assertEquals($expect, $actual);
     }
 
+    /**
+     * @desc   测试BOOL查询
+     * @author limx
+     */
     public function testBoolQuery()
     {
         $client = ElasticSearchClient::getInstance();
@@ -228,6 +244,10 @@ class ElasticSearchTest extends UnitTestCase
         $this->assertEquals($expect, $actual);
     }
 
+    /**
+     * @desc   测试BOOL查询或者逻辑
+     * @author limx
+     */
     public function testOrBoolQuery()
     {
         $client = ElasticSearchClient::getInstance();
@@ -257,4 +277,44 @@ class ElasticSearchTest extends UnitTestCase
         $res = $client->search($params);
         $this->assertEquals(4, $res['hits']['total']);
     }
+
+    /**
+     * @desc   查询所有数据
+     * @author limx
+     */
+    public function testMatchAll()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $params = [
+            'index' => SystemCode::ES_INDEX,
+            'type' => SystemCode::ES_TYPE,
+            'body' => [
+                'query' => [
+                    'match_all' => (object)[],
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    [
+                        'id' => 'asc',
+                    ]
+                ],
+            ],
+        ];
+
+        $res = $client->search($params);
+
+        $expect = di('configCenter')->get('es_docs')->toArray();
+
+        $this->assertEquals(4, $res['hits']['total']);
+
+        $actual = [];
+        foreach ($res['hits']['hits'] as $item) {
+            $actual[] = $item['_source'];
+        }
+
+        $this->assertEquals($expect, $actual);
+    }
+
+
 }

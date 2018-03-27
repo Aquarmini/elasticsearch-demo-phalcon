@@ -100,11 +100,17 @@ class InitTask extends Task
             'type' => $this->type,
             'body' => [
                 'properties' => [
+                    'id' => ['type' => 'long'],
                     'name' => ['type' => 'string'],
-                    'book.author' => ['type' => 'string'],
-                    'book.name' => ['type' => 'string'],
-                    'book.publish' => ['type' => 'date'],
-                    'book.desc' => ['type' => 'string'],
+                    'book' => [
+                        'type' => 'nested',
+                        'properties' => [
+                            'author' => ['type' => 'string'],
+                            'name' => ['type' => 'string'],
+                            'publish' => ['type' => 'date'],
+                            'desc' => ['type' => 'string'],
+                        ],
+                    ],
                     'age' => ['type' => 'short'],
                     'birthday' => ['type' => 'date'],
                     'location' => ['type' => 'geo_point'],
