@@ -416,4 +416,50 @@ class ElasticSearchTest extends UnitTestCase
 
         $this->assertEquals($expect, $result);
     }
+
+    /**
+     * @desc   Terms查询
+     * @author limx
+     */
+    public function testBoolTerms()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $params = [
+            'index' => SystemCode::ES_INDEX,
+            'type' => SystemCode::ES_TYPE,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            ['terms' => ['id' => [1, 3]]],
+                        ],
+                    ],
+
+                ],
+                'from' => 0,
+                'size' => 5,
+                'sort' => [
+                    [
+                        'id' => 'asc',
+                    ]
+                ],
+            ],
+        ];
+
+        $res = $client->search($params);
+        $docs = di('configCenter')->get('es_docs')->toArray();
+
+        $expect = [];
+        $expect[] = $docs[1];
+        $expect[] = $docs[3];
+
+        $this->assertEquals(2, $res['hits']['total']);
+
+        $actual = [];
+        foreach ($res['hits']['hits'] as $item) {
+            $actual[] = $item['_source'];
+        }
+
+        $this->assertEquals($expect, $actual);
+    }
 }
