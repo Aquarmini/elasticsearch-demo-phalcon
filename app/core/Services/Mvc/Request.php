@@ -8,6 +8,7 @@
 // +----------------------------------------------------------------------
 namespace App\Core\Services\Mvc;
 
+use App\Core\Http\Request\SwooleRequest;
 use App\Core\Services\ServiceProviderInterface;
 use Phalcon\Config;
 use Phalcon\DI\FactoryDefault;
@@ -17,6 +18,9 @@ class Request implements ServiceProviderInterface
     public function register(FactoryDefault $di, Config $config)
     {
         $di->setShared('request', function () {
+            if (defined('ENGINE') && ENGINE === 'SWOOLE') {
+                return new SwooleRequest();
+            }
             $request = new \Xin\Phalcon\Http\Request();
             return $request;
         });

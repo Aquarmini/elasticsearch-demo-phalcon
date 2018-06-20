@@ -57,15 +57,15 @@ class Handler
             $this->logger->error($msg);
             $code = $ex->getErrorCode();
             $message = $ex->getMessage();
+            Response::fail($code, $message)->send();
         } else {
             $this->errorLogger->error($msg);
-            if (env('APP_DEBUG', false)) {
+            if (di('config')->get('debug', false)) {
                 $message = $ex->getMessage();
             }
+            Response::fail($code, $message)->send();
+            exit;
         }
-
-        Response::fail($code, $message)->send();
-        exit(255);
     }
 
     /**
@@ -83,6 +83,6 @@ class Handler
             $this->errorLogger->error($msg);
         }
         echo $msg;
-        exit(255);
+        exit;
     }
 }

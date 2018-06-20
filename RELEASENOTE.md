@@ -5,6 +5,70 @@
 - [ ] php单元测试
 
 ### Added
+
+### Changed
+* 通过Handler捕获到的异常，主动退出
+
+### Fixed
+* 修改reload、stop脚本无法使用的BUG
+* 修改logDir有误的BUG
+
+### Deleted
+
+## [2.4.4]
+
+增加Swoole驱动引擎，暂不支持SESSION模块。
+
+### Checked
+- [x] php单元测试
+
+### Added
+* 增加swoole http引擎配置
+* 增加getJsonRawBody
+* 完善Cookies初始化
+
+### Changed
+* 修改MVC注入依赖时，兼容Swoole引擎
+* 修改master server pid默认值为0
+* 重写异常捕获Handler
+
+### Fixed
+* 修改mongo密码为纯数字时报错的BUG
+
+## [2.4.0]
+### Checked
+- [x] php单元测试
+
+### Changed
+* 修改phpdotenv为Phalcon\\Config 模块
+* 修改依赖库版本号
+
+### Deleted
+* 删除.env文件！！
+
+## [2.3.0]
+### Checked
+- [x] php单元测试
+
+### Added
+
+### Changed
+* 修改目录结构
+* 修改RedisUtil@incr & incrBy 增加超时时间的方法
+* 消息队列模块使用独立x-swoole-queue模块
+
+### Fixed
+* 修改SQL日志记录有误的BUG
+
+### Deleted
+* 删除App\Utils\Redis\Commands
+* 删除JobInterface
+
+## [2.2.10]
+### Checked
+- [x] php单元测试
+
+### Added
 * 增加Request服务
 * 增加锁目录
 * 增加PID目录
@@ -19,8 +83,6 @@
 
 ### Fixed
 * 修改Mongodb用户名密码为空时无法使用的BUG
-
-### Deleted
 
 ## [2.2.5]
 ### Checked

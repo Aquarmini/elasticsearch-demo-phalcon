@@ -1,14 +1,16 @@
 <?php
 // +----------------------------------------------------------------------
-// | CommandInterface.php [ WE CAN DO IT JUST THINK IT ]
+// | SwooleCookie.php [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
 // | Copyright (c) 2016-2017 limingxinleo All rights reserved.
 // +----------------------------------------------------------------------
 // | Author: limx <715557344@qq.com> <https://github.com/limingxinleo>
 // +----------------------------------------------------------------------
-namespace App\Utils\Redis\Commands;
+namespace App\Core\Http\Cookie;
 
-interface CommandInterface
+use Phalcon\Http\Cookie;
+
+class SwooleCookie extends Cookie
 {
-    public static function getScript();
+    public $_readed = true;
 }

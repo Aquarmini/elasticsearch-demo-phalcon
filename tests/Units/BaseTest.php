@@ -8,7 +8,6 @@
 // +----------------------------------------------------------------------
 namespace Tests\Units;
 
-use App\Common\Clients\Rpc\BasicClient;
 use Tests\UnitTestCase;
 
 /**
