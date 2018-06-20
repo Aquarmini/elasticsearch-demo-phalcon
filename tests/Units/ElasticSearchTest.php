@@ -19,6 +19,20 @@ use Tests\UnitTestCase;
 class ElasticSearchTest extends UnitTestCase
 {
     /**
+     * @desc   测试ES索引
+     * @author limx
+     */
+    public function testIndices()
+    {
+        $client = ElasticSearchClient::getInstance();
+        $indices = $client->indices();
+        $params = ['index' => SystemCode::ES_INDEX];
+        $result = $indices->get($params);
+
+        $this->assertTrue(isset($result[SystemCode::ES_INDEX]));
+    }
+
+    /**
      * @desc   测试读取文档
      * @author limx
      */
