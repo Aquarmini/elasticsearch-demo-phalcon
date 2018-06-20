@@ -21,7 +21,8 @@ class ElasticSearchClient
         if (isset(static::$_instance) && static::$_instance instanceof Client) {
             return static::$_instance;
         }
-        $host = env('ELASTIC_SEARCH_HOST', '127.0.0.1:9200');
+        $config = di('config')->elastic;
+        $host = $config->get('host', '127.0.0.1:9200');
         return static::$_instance = ClientBuilder::create()->setHosts([$host])->build();
     }
 }
